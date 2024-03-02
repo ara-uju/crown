@@ -1,0 +1,105 @@
+/******************* FONTS ******************/
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 900;
+	src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700;900&display=swap');
+}
+
+.jost-nine {
+	font-family: "Jost", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 900;
+	font-style: italic;
+}
+
+.rubik-glitch {
+	font-family: "Rubik Glitch Pop", system-ui;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.climate-crisis {
+	font-family: "Climate Crisis", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	font-variation-settings:
+		"YEAR" 1979;
+}
+
+.dancing-script {
+	font-family: "Dancing Script", cursive;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.pixelify-sans {
+	font-family: "Pixelify Sans", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.oswald {
+	font-family: "Oswald", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 200;
+	font-style: normal;
+}
+
+/* vars */
+:root {
+	--background-color: #0f0f0f;
+	--header-color: white;
+	--subheader-color: gray;
+	--window-color: rgb(35, 35, 35);
+	--stripe-color: rgb(30, 30, 30);
+
+	--font-black: 900;
+	--font-bold: 700;
+	--font-medium: 500;
+
+	--main-padding: 2.4em;
+}
+
+*::selection {
+	background-color: var(--subheader-color);
+}
+
+html,
+body,
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Roboto';
+	font-weight: 900;
+	background: var(--background-color);
+	color: var(--header-color);
+	min-height: 100svh;
+	display: flex;
+	text-transform: uppercase;
+}
+
+div {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin: auto;
+}
+
+h1 {
+	font-size: 8.5vw;
+}
+
+p {
+	font-size: 18px;
+	opacity: .5;
+	font-weight: 500;
+}
