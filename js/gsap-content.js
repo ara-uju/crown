@@ -359,11 +359,11 @@ document.addEventListener('DOMContentLoaded', function () {
         bgVideo.loop = true;
       },
       onLeave: () => {
-        bgVideo.pause();
+        //bgVideo.pause();
         bgVideo.loop = false;
       },
       onLeaveBack: () => {
-        bgVideo.pause();
+        //bgVideo.pause();
         bgVideo.loop = false;
       }
     }
@@ -676,8 +676,8 @@ document.addEventListener('DOMContentLoaded', function () {
     .fromTo(".crown-video-container", {
       scale: 2.5
     }, {
-      scale: .6,
-      yPercent: 28,
+      scale: .5,
+      yPercent: 10,
       ease: "power3.inout",
       duration: .45,
       onComplete: () => {

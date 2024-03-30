@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    /*
     // Touch event listener
     aboutBtn.addEventListener('touchstart', function () {
         if(!menuOpen) {
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             hideMenu();
         }
-    });
+    });*/
 
     function showMenu() {
         document.querySelector("body").classList.add("show-menu");
