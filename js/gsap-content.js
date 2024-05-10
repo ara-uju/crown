@@ -12,7 +12,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   videoList.forEach((videoEl, i) => {
     videoEl.addEventListener("loadeddata", function () {
-      console.log("loaded " + videoEl + " of /" + videoList.length);
+      videoEl.play();
+      let pauseWait = setTimeout(() => {
+        videoEl.pause();
+        clearTimeout(pauseWait);
+      }, 1500);
+      //console.log("loaded video #" + i + " of /" + videoList.length);
     });
   });
 
