@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const videoList = document.querySelectorAll("video");
 
-  videoList.forEach((videoEl) => {
+  videoList.forEach((videoEl, i) => {
     videoEl.addEventListener("loadeddata", function () {
       console.log("loaded " + videoEl + " of /" + videoList.length);
     });
@@ -49,8 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
     scrub: 1,
     pin: true,
     onEnter: () => {
-      document.querySelector("#desktop").classList.add("hide");
-      ScrollTrigger.refresh();
+      if (docReady) {
+        document.querySelector("#desktop").classList.add("hide");
+        ScrollTrigger.refresh();
+      }
     },
     onUpdate: (self) => {
       let index = Math.floor(self.progress * (ootdFontList.length - 1));
@@ -174,14 +176,29 @@ document.addEventListener('DOMContentLoaded', function () {
       scale: 0,
       xPercent: 80,
       yPercent: 200,
-      duration: .8,
+      duration: .4,
       ease: "power3.out",
-      onComplete: ()=> {
+      onComplete: () => {
         document.querySelector(".this-my-fashion-section").classList.remove("white-bg");
       }
     })
     .to(".this-my-fashion-section .this-my-fashion-container>div", { // hide
       display: "none"
+    });
+
+  // progress bar for the above animation section
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: ".panel-container",
+      start: "top top",
+      end: "bottom top",
+      pin: ".horizontal-progress-bar",
+      toggleActions: "play reverse play reverse",
+      scrub: 1
+    }
+  })
+    .to(".horizontal-progress-bar .progress-bar-inner", {
+      width: "100%"
     });
 
 
@@ -197,12 +214,15 @@ document.addEventListener('DOMContentLoaded', function () {
       markers: false
     }
   })
+    .from(".horizontal-progress-bar .progress-bar-inner", {
+      width: "0%"
+    })
     .from(".shut-up", {
       opacity: 0,
       x: "25%",
       duration: .1,
       ease: "power3.out"
-    })
+    }, "<")
     .fromTo(".shut-up span", {
       opacity: 0,
       x: "25%"
@@ -286,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-  gsap.timeline({
+  let scrollTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".single-word-section",
       start: "top top",
@@ -309,34 +329,6 @@ document.addEventListener('DOMContentLoaded', function () {
         xPercent: 0,
         //stagger: .25,
       }, "<");
-
-  // Horizontal slide wrapper (video)
-  /*var videoSections = document.querySelectorAll(".bg-img-slide-wrapper .bg-img-container video");
-  videoSections.forEach((videoS) => {
-
-    const videoWidth = videoS.offsetWidth;
-
-    ScrollTrigger.create({
-      trigger: videoS,
-      start: "top bottom",
-      end: `bottom+=${videoWidth} top-=${videoWidth}`,
-      onEnter: () => {
-        videoS.play();
-        console.log(videoS);
-        console.log(videoS.querySelector("video"));
-      },
-      onEnterBack: () => {
-        videoS.play();
-      },
-      onLeave: () => {
-        videoS.pause();
-      },
-      onLeaveBack: () => {
-        videoS.pause();
-      }
-    });
-  });*/
-
 
   // VERTICAL SCROLLER
   // Content enter - stripes - popup - bg video
@@ -453,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
       pin: ".container-inner-action",
       toggleActions: "play resume play resume",
       scrub: true,
-      onLeave: ()=> {
+      onLeave: () => {
         document.querySelector(".clap-bg").classList.remove("show");
       },
       onLeaveBack: () => {
@@ -529,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function () {
       scrub: true
     }
   })
-    .from(".progress-bar-inner", {
+    .from(".progress-bar .progress-bar-inner", {
       height: "0%"
     });
 
@@ -558,6 +550,10 @@ document.addEventListener('DOMContentLoaded', function () {
       anticipatePin: 1,
       toggleActions: "play reverse play reverse",
       scrub: 1,
+      onnEnter: () => {
+        document.querySelector(".crown-exe video").play();
+        document.querySelector(".crown-exe video").loop = true;
+      },
       onLeaveBack: () => {
         document.querySelector(".crown-exe video").pause();
         document.querySelector(".crown-exe video").loop = false;
@@ -622,9 +618,9 @@ document.addEventListener('DOMContentLoaded', function () {
       toggleActions: "play reverse play reverse",
       scrub: 1,
       onUpdate: function (self) {
-        if (self.progress <= .44) {
+        if (self.progress <= .42) {
           document.querySelector(".crown-video-message").innerHTML = "only the crown";
-        } else if (self.progress > .44 && self.progress <= .56) {
+        } else if (self.progress > .42 && self.progress <= .56) {
           document.querySelector(".crown-video-message").innerHTML = "can determine";
         } else {
           document.querySelector(".crown-video-message").innerHTML = "fate";

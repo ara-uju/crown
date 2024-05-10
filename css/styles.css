@@ -149,6 +149,11 @@ body {
 	overflow-x: clip;
 }
 
+.no-overflow,
+.no-overflow div {
+	overflow: hidden !important;
+}
+
 section {
 	min-height: 100svh;
 	max-width: 100vw;
@@ -401,6 +406,41 @@ button {
 	padding-top: 1rem;
 }
 
+.border-menu.bottom-row .menu-footer {
+	color: rgb(200, 200, 200);
+    position: absolute;
+    bottom: 2.4rem;
+    left: 0;
+    right: 0;
+    display: flex;
+	justify-content: center;
+    font-size: 1.2rem;
+	visibility: hidden;
+	opacity: 0;
+	transition: all .4s ease;
+	padding: 0 1.5rem;
+}
+
+.border-menu.bottom-row .menu-footer p {
+	background-color: rgb(25, 25, 25);
+	padding: 0 4px;
+	text-align: center;
+}
+
+.border-menu.bottom-row .menu-footer a {
+	text-decoration: underline;
+}
+
+.border-menu.bottom-row .menu-footer a,
+.border-menu.bottom-row .menu-footer span {
+	color: rgb(225, 225, 225);
+}
+
+.show-menu .border-menu.bottom-row .menu-footer {
+    visibility: visible;
+	opacity: .9;
+}
+
 .border-menu .text-container {
 	cursor: pointer;
 	display: flex;
@@ -414,10 +454,13 @@ button {
 	font-weight: bold;
 }
 
-.info-about p {
+.info-about p,
+.info-about a {
 	color: #FFF;
 	background-color: #000;
 	opacity: .85;
+	padding: 0 4px;
+	padding-right: 8px;
 }
 
 .info-about {
@@ -425,7 +468,7 @@ button {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100svh;
+	min-height: 100svh;
 	font-size: 36px;
 	opacity: 0;
 	display: flex;
@@ -444,6 +487,12 @@ button {
 
 .info-about a {
 	opacity: .9;
+	display: flex;
+	align-items: center;
+}
+
+.info-about a:hover {
+	text-decoration: underline;
 }
 
 @media screen and (max-width: 480px) {
@@ -461,6 +510,10 @@ button {
 @media screen and (max-width: 991px) {
 	.info-about {
 		font-size: 28px;
+	}
+
+	.border-menu.bottom-row .menu-footer {
+		font-size: 12px;
 	}
 }
 
@@ -810,7 +863,8 @@ h2.this-my-fashion.regular {
 }
 
 /***** OOTD SCROLLER *****/
-.progress-bar {
+.progress-bar,
+.horizontal-progress-bar {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -818,12 +872,23 @@ h2.this-my-fashion.regular {
 	width: 6px;
 }
 
-.progress-bar .progress-bar-inner {
+.horizontal-progress-bar {
+	height: 6px;
+	width: 100vw;
+}
+
+.progress-bar .progress-bar-inner,
+.horizontal-progress-bar .progress-bar-inner {
 	position: relative;
 	width: 100%;
 	top: 0;
 	height: 100%;
-	background-color: green;
+	background-color: #2bbe34;
+}
+
+.horizontal-progress-bar .progress-bar-inner {
+	background-color: #dc1d77;
+	height: 6px;
 }
 
 .scroller-container {
@@ -1318,7 +1383,7 @@ h1,
 
 .crown-video-message {
 	position: absolute;
-	font-size: clamp(1rem, 6vw, 5rem);
+	font-size: clamp(1rem, 6vw, 4rem);
 	padding: .8rem 0;
 	border-top: .15rem #ffffff4a solid;
 	border-bottom: .15rem #ffffff4a solid;
@@ -1326,6 +1391,7 @@ h1,
 	width: 100%;
 	align-items: center;
 	justify-content: center;
+	mix-blend-mode: color-dodge;
 }
 
 .crown-video {

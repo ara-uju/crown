@@ -12,16 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    /*
-    // Touch event listener
-    aboutBtn.addEventListener('touchstart', function () {
-        if(!menuOpen) {
-            showMenu();
-        } else {
-            hideMenu();
-        }
-    });*/
-
     function showMenu() {
         document.querySelector("body").classList.add("show-menu");
 
