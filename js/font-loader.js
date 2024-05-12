@@ -1,4 +1,3 @@
-//console.clear();
 let docReady = false;
 document.addEventListener('DOMContentLoaded', function () {
 
