@@ -279,7 +279,7 @@ button {
 
 
 .clap-bg {
-	background-image: url('/media/ready_action.png');
+	background-image: url('../media/ready_action.png');
 	background-repeat: no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -570,7 +570,7 @@ button {
 	gap: 8px;
 	max-width: 500px;
 	position: absolute;
-	bottom: var(--main-padding);
+	top: var(--main-padding);
 	left: var(--main-padding);
 	filter: drop-shadow(0px 1px 6px #0f0e1052);
 }
@@ -633,9 +633,9 @@ button {
 
 @media screen and (max-width: 767px) {
 	.popup-container {
-		right: var(--main-padding);
+		right: var(--main-padding-m);
 		left: unset;
-		top: var(--main-padding);
+		top: var(--main-padding-m);
 		bottom: unset;
 	}
 

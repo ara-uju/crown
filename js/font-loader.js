@@ -63,12 +63,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, {
                         yPercent: 0,
                         opacity: 1,
-                        delay: .5,
+                        delay: .4,
                         stagger: .2,
                         duration: .4,
                         ease: "power3.out"
                     }).to(".popup-container .popup-el", {
-                        delay: 2,
+                        delay: 2.5,
                         yPercent: 100,
                         opacity: 0,
                         stagger: .08,
