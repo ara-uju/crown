@@ -8,21 +8,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ScrollTrigger.refresh();
 
-  const videoList = document.querySelectorAll("video");
 
-  videoList.forEach((videoEl, i) => {
-    videoEl.addEventListener("loadeddata", function () {
-      videoEl.play();
-      let pauseWait = setTimeout(() => {
-        videoEl.pause();
-        clearTimeout(pauseWait);
-      }, 1500);
-      //console.log("loaded video #" + i + " of /" + videoList.length);
+  // helper function to load and play video
+  function loadAndPlayVideo(videoEl) {
+    if (!videoEl) return;
+
+    console.log("loading and playing ", videoEl);
+    if (videoEl.dataset.loaded === 'true') {
+      videoEl?.play().catch(() => {
+        console.log("video failed to play");
+      });
+      return;
+    }
+
+    const sources = videoEl.querySelectorAll('source');
+    sources.forEach((source) => {
+      const src = source.dataset.src;
+      if (src && !source.src) {
+        source.setAttribute('src', src);
+      }
+      console.log("video SRC", source.src);
     });
-  });
+
+    videoEl.load();
+    videoEl.dataset.loaded = 'true';
+    videoEl.play().catch(() => {
+      console.log("video failed to play");
+    });
+  }
+
+  // helper function to pause video
+  function pauseVideo(videoEl) {
+    if (videoEl) {
+      videoEl.pause();
+      // videoEl.loop = false;
+    }
+  }
+
 
   // DESKTOP
-  let folder = document.querySelector(".folder-container");
+  const folder = document.querySelector(".folder-container");
   let windowHeight = window.innerHeight;
 
   folder.addEventListener("click", () => {
@@ -40,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // INTRO TYPE
-  let ootd = document.querySelector(".ootd");
+  const ootd = document.querySelector(".ootd");
   let ootdFontList = ["dm-serif", "pixelify-sans", "rubik-glitch", "jost-nine", "oswald", "dancing-script", "climate-crisis"];
   let currentClass = null;
 
@@ -207,16 +232,39 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
+  const dongieBleh = document.querySelector(".bleh");
+  const introVideos = document.querySelectorAll('.single-word-section.left video');
+
   // SHUT UP - NO - MORE - QUESTIONS
   gsap.timeline({
     scrollTrigger: {
       trigger: ".single-word-section",
       start: "top top",
-      end: "+=500%",
+      end: "+=600%",
       pin: true,
       toggleActions: "play resume play reverse",
       scrub: true,
-      markers: false
+      markers: false,
+      onEnter: () => {
+        introVideos.forEach((video) => {
+          loadAndPlayVideo(video);
+        });
+      },
+      onEnterBack: () => {
+        introVideos.forEach((video) => {
+          loadAndPlayVideo(video);
+        });
+      },
+      onLeave: () => {
+        introVideos.forEach((video) => {
+          pauseVideo(video);
+        });
+      },
+      onLeaveBack: () => {
+        introVideos.forEach((video) => {
+          pauseVideo(video);
+        });
+      }
     }
   })
     .from(".horizontal-progress-bar .progress-bar-inner", {
@@ -290,10 +338,11 @@ document.addEventListener('DOMContentLoaded', function () {
           {
             height: "auto",
             opacity: 1,
+            delay: .25,
             duration: .15,
             ease: "power2.out",
             onStart: () => {
-              document.querySelector(".bleh").play();
+              loadAndPlayVideo(dongieBleh);
             },
             onComplete: () => {
               let timeout = setTimeout(() => {
@@ -315,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
     scrollTrigger: {
       trigger: ".single-word-section",
       start: "top top",
-      end: "+=700%",
+      end: "+=850%",
       toggleActions: "play resume play reverse",
       scrub: true
     }
@@ -327,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
       stagger: .5,
       duration: 1
     }, "<")
-    .fromTo(".bg-img-container video, .bg-img-container img", {
+    .fromTo(".bg-img-container video", {
       xPercent: -150
     },
       {
@@ -337,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // VERTICAL SCROLLER
   // Content enter - stripes - popup - bg video
-  let bgVideo = document.querySelector("video.ootd-background");
+  const bgVideo = document.querySelector("video.ootd-background");
   gsap.timeline({
     scrollTrigger: {
       trigger: ".vertical-scroller-section",
@@ -348,11 +397,11 @@ document.addEventListener('DOMContentLoaded', function () {
       toggleActions: "play resume play reverse",
       scrub: false,
       onEnter: () => {
-        bgVideo.play();
+        loadAndPlayVideo(bgVideo);
         bgVideo.loop = true;
       },
       onEnterBack: () => {
-        bgVideo.play();
+        loadAndPlayVideo(bgVideo);
         bgVideo.loop = true;
       },
       onLeave: () => {
@@ -393,7 +442,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
   // popups - window containers
-  let windowContainer = document.querySelectorAll(".vertical-scroller-section .window-scroll-reveal");
+  const windowContainer = document.querySelectorAll(".vertical-scroller-section .window-scroll-reveal");
   windowContainer.forEach((windowEl) => {
     //let windowParent = windowEl.parentElement;
     let windowVideo = windowEl.querySelector("video");
@@ -408,28 +457,18 @@ document.addEventListener('DOMContentLoaded', function () {
         scrub: false,
         onEnter: () => {
           if (windowVideo) {
-            windowVideo.play();
+            loadAndPlayVideo(windowVideo);
             windowVideo.loop = true;
           }
         },
         onEnterBack: () => {
           if (windowVideo) {
-            windowVideo.play();
+            loadAndPlayVideo(windowVideo);
             windowVideo.loop = true;
           }
         },
-        onLeave: () => {
-          if (windowVideo) {
-            windowVideo.pause();
-            windowVideo.loop = false;
-          }
-        },
-        onLeaveBack: () => {
-          if (windowVideo) {
-            windowVideo.pause();
-            windowVideo.loop = false;
-          }
-        }
+        onLeave: () => pauseVideo(windowVideo),
+        onLeaveBack: () => pauseVideo(windowVideo)
       }
     }).fromTo(windowEl, {
       scale: 0
@@ -441,6 +480,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+
+  const clapBg = document.querySelector(".clap-bg");
+  const clapVideo = document.querySelector(".window-container.ready-action video");
+
   // ready - action
   gsap.timeline({
     scrollTrigger: {
@@ -451,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function () {
       toggleActions: "play resume play resume",
       scrub: true,
       onLeave: () => {
-        document.querySelector(".clap-bg").classList.remove("show");
+        clapBg.classList.remove("show");
       },
       onLeaveBack: () => {
         gsap.to(".window-container.ready-action", {
@@ -459,7 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
           opacity: 0,
           duration: 0
         });
-        document.querySelector(".clap-bg").classList.remove("show");
+        clapBg.classList.remove("show");
       }
     }
   })
@@ -489,8 +532,8 @@ document.addEventListener('DOMContentLoaded', function () {
           duration: .2,
           ease: "power2.out",
           onStart: () => {
-            document.querySelector(".window-container.ready-action video").play();
-            document.querySelector(".clap-bg").classList.add("show");
+            loadAndPlayVideo(clapVideo);
+            clapBg.classList.add("show");
           }
         });
       }
@@ -545,6 +588,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector(".stripe-content").appendChild(newLayer);
   }
 
+  const damiLastVideo = document.querySelector(".crown-exe video");
+
   // Window.exe - do you believe in the power of the crown?
   gsap.timeline({
     scrollTrigger: {
@@ -555,13 +600,11 @@ document.addEventListener('DOMContentLoaded', function () {
       anticipatePin: 1,
       toggleActions: "play reverse play reverse",
       scrub: 1,
-      onnEnter: () => {
-        document.querySelector(".crown-exe video").play();
-        document.querySelector(".crown-exe video").loop = true;
+      onEnter: () => {
+        loadAndPlayVideo(damiLastVideo);
       },
       onLeaveBack: () => {
-        document.querySelector(".crown-exe video").pause();
-        document.querySelector(".crown-exe video").loop = false;
+        pauseVideo(damiLastVideo);
       }
     }
   }).from(".crown-exe", {
@@ -605,13 +648,17 @@ document.addEventListener('DOMContentLoaded', function () {
       scale: 2.2,
       duration: 1,
       onStart: () => {
-        document.querySelector(".crown-exe video").play();
-        document.querySelector(".crown-exe video").loop = true;
+        loadAndPlayVideo(crownExeVideo);
       }
     }, .99)
     .to(".crown-exe .absolute:after", {
       opacity: 1
     }, ">");
+
+  const crownVidContainer = document.querySelector(".crown-video-container");
+  const crownVideoMsg = document.querySelector(".crown-video-message");
+  const crownS = document.querySelector(".crown-video-section");
+  const crownExeVideo = document.querySelector(".crown-video");
 
   // Crown reveal
   gsap.timeline({
@@ -619,27 +666,32 @@ document.addEventListener('DOMContentLoaded', function () {
       trigger: ".footer-section-wrapper",
       start: "30% top",
       end: "bottom bottom",
-      pin: ".crown-video-container",
+      pin: crownVidContainer,
       toggleActions: "play reverse play reverse",
       scrub: 1,
       onUpdate: function (self) {
         if (self.progress <= .42) {
-          document.querySelector(".crown-video-message").innerHTML = "only the crown";
+          crownVideoMsg.innerHTML = "only the crown";
         } else if (self.progress > .42 && self.progress <= .56) {
-          document.querySelector(".crown-video-message").innerHTML = "can determine";
+          crownVideoMsg.innerHTML = "can determine";
         } else {
-          document.querySelector(".crown-video-message").innerHTML = "fate";
+          crownVideoMsg.innerHTML = "fate";
         }
+      },
+      onEnter: () => {
+        loadAndPlayVideo(crownExeVideo);
+      },
+      onLeaveBack: () => {
+        pauseVideo(crownExeVideo);
       }
     }
-  }).fromTo(".footer-section.crown-video-section", {
+  }).fromTo(crownS, {
     opacity: 0
   }, {
     opacity: 1,
     duration: .5,
     onUpdate: () => {
       let randomN = Math.random(1);
-      let crownS = document.querySelector(".crown-video-section");
 
       if (randomN > 1 && randomN < 3) {
         crownS.setAttribute('style', 'mix-blend-mode: difference');
@@ -650,7 +702,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   }, "<")
-    .fromTo(".crown-video-container", {
+    .fromTo(crownVidContainer, {
       yPercent: 0,
       scale: 3,
       opacity: 0
@@ -660,13 +712,13 @@ document.addEventListener('DOMContentLoaded', function () {
       opacity: 1,
       ease: "power3.out"
     }, "<")
-    .fromTo(".crown-video-message", {
+    .fromTo(crownVideoMsg, {
       display: "none"
     }, {
       display: "flex",
       duration: .5
     })
-    .to(".crown-video-message", {
+    .to(crownVideoMsg, {
       display: "none",
       duration: 0
     })
@@ -674,7 +726,7 @@ document.addEventListener('DOMContentLoaded', function () {
       opacity: 0,
       duration: .5
     }, "<")
-    .fromTo(".crown-video-container", {
+    .fromTo(crownVidContainer, {
       scale: 2.5
     }, {
       scale: .5,
